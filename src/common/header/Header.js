@@ -10,6 +10,8 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import PropTypes from 'prop-types';
+import { FormHelperText } from '@material-ui/core';
+
 
 
 const customStyles = {
@@ -41,7 +43,9 @@ class Header extends Component {
         super();
         this.state = {
             modalIsOpen: false,
-            value: 0
+            value: 0,
+            userName: "",
+            usernameRequired: "dispNone"
         }
 
     }
@@ -56,6 +60,14 @@ class Header extends Component {
 
     tabChangeHandler =(event, value) => {
         this.setState({value});
+    }
+
+    onClickHandler =() => {
+        this.state.userName === "" ? this.setState({usernameRequired: "dispBlock"}) : this.setState({usernameRequired: "dispNone"});
+    }
+
+    userFieldChangeHandler = (e) => {
+        this.setState({userName: e.target.value});
     }
 
     render() {
@@ -79,17 +91,18 @@ class Header extends Component {
                         <Tab label="Register" />
                     </Tabs>
 
-                    {this.state.value == 0 &&
+                    {this.state.value === 0 &&
                     <TabContainer>
                         <FormControl required>
                             <InputLabel htmlFor="username">Username</InputLabel>
-                            <Input id="username" type="text" />
+                            <Input id="username" type="text" onChange={this.userFieldChangeHandler}/>
+                            <FormHelperText className={this.state.usernameRequired}><span className="red">required</span></FormHelperText>
                         </FormControl><br /><br />
                         <FormControl>
                             <InputLabel htmlFor="password">Password</InputLabel>
                             <Input id="password" type="password" />
                         </FormControl><br /><br />
-                        <Button variant="contained" color="primary">LOGIN</Button>
+                        <Button variant="contained" color="primary" onClick={this.onClickHandler}>LOGIN</Button>
                         </TabContainer>    
                     }                
                     </Modal>
